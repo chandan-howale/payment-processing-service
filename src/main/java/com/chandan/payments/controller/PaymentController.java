@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.chandan.payments.pojo.CreatePaymentRequest;
 import com.chandan.payments.pojo.InitiatePaymentRequest;
+import com.chandan.payments.pojo.PaymentResponse;
 import com.chandan.payments.service.interfaces.PaymentService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,22 +23,22 @@ public class PaymentController {
 	private final PaymentService paymentService;
 	
 	@PostMapping
-	public String createPayment(@RequestBody CreatePaymentRequest createPaymentRequest) {
+	public PaymentResponse createPayment(@RequestBody CreatePaymentRequest createPaymentRequest) {
 		log.info("Creating payment... createPaymentRequest: {}", createPaymentRequest);
 		
-		String response = paymentService.createPayment(createPaymentRequest);
+		PaymentResponse response = paymentService.createPayment(createPaymentRequest);
 		log.info("Payment creation response from service: {}", response);
 		
 		return response;
 	}
 	
 	@PostMapping("/{txnReference}/initiate")
-	public String initiatePayment(@PathVariable String txnReference, 
+	public PaymentResponse initiatePayment(@PathVariable String txnReference, 
 			@RequestBody InitiatePaymentRequest initiatePaymentRequest) {
 		
 		log.info("Initiating payment... txnReference:{} | initiatePaymentRequest:{}", txnReference, initiatePaymentRequest);
 		
-		String response = paymentService.initiatePayment(txnReference, initiatePaymentRequest);
+		PaymentResponse response = paymentService.initiatePayment(txnReference, initiatePaymentRequest);
 		log.info("Payment initiation response from service: {}", response);
 		
 		return response;

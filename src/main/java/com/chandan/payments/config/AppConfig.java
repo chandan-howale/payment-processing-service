@@ -4,6 +4,8 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.core5.util.TimeValue;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -43,6 +45,15 @@ public class AppConfig {
 				.requestFactory(requestFactory)
 				.build();
 	}
+	
+    @Bean
+    ModelMapper modelMapper() {
+    	ModelMapper mapper = new ModelMapper();
+    	mapper.getConfiguration()
+    			.setMatchingStrategy(MatchingStrategies.STRICT)	// Use STRICT matching strategy
+    			.setSkipNullEnabled(true);						// Don't overwrite existing values with nulls
+        return mapper;
+    }
 
 	
 }
