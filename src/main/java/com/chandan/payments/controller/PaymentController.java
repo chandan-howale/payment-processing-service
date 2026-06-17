@@ -27,6 +27,7 @@ public class PaymentController {
 		log.info("Creating payment... createPaymentRequest: {}", createPaymentRequest);
 		
 		PaymentResponse response = paymentService.createPayment(createPaymentRequest);
+		
 		log.info("Payment creation response from service: {}", response);
 		
 		return response;
