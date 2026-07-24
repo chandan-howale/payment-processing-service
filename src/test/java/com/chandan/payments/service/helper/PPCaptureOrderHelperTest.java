@@ -114,8 +114,8 @@ class PPCaptureOrderHelperTest {
                 ProcessingServiceException.class,
                 () -> helper.processResponse(okResponse));
 
-        assertEquals(ErrorCodeEnum.PAYPAL_PROVIDER_UNKNOWN_ERROR.getErrorCode(), ex.getErrorCode());
-        assertEquals(HttpStatus.BAD_GATEWAY, ex.getHttpStatus());
+        assertEquals(ErrorCodeEnum.PAYPAL_PROVIDER_SERVICE_UNAVAILABLE.getErrorCode(), ex.getErrorCode());
+        assertEquals(HttpStatus.SERVICE_UNAVAILABLE, ex.getHttpStatus());
     }
 
     // -------------------------------------------------------------------------

@@ -2,6 +2,7 @@ package com.chandan.payments.service.helper;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.*;
 
 import com.chandan.payments.paypalprovider.PPOrderResponse;
 import com.chandan.payments.paypalprovider.PPErrorResponse;
@@ -64,6 +65,15 @@ class PPCreateOrderHelperTest {
         urlField.setAccessible(true);
         urlField.set(helper, "https://api.paypal.com/v2/orders");
 
+        // Mock JsonUtil to return test JSON
+        // Use Jackson to serialize a PPCreateOrderReq so we match the actual serialization format
+        com.chandan.payments.paypalprovider.PPCreateOrderReq req = new com.chandan.payments.paypalprovider.PPCreateOrderReq();
+        req.setCurrencyCode("USD");
+        req.setAmount(100.50);
+        req.setReturnUrl("https://example.com/success");
+        req.setCancelUrl("https://example.com/cancel");
+        when(jsonUtil.toJson(any())).thenReturn(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(req));
+
         // Act
         HttpRequest request = helper.prepareHttpRequest(txnReference, initReq, txnDto);
 
@@ -73,10 +83,10 @@ class PPCreateOrderHelperTest {
         assertEquals("application/json", request.getHttpHeaders().getContentType().toString());
         assertNotNull(request.getBody());
         String body = (String) request.getBody();
-        assertTrue(body.contains("\"currency_code\":\"USD\""));
-        assertTrue(body.contains("\"amount\":\"100.5\""));
-        assertTrue(body.contains("\"return_url\":\"https://example.com/success\""));
-        assertTrue(body.contains("\"cancel_url\":\"https://example.com/cancel\""));
+        assertTrue(body.contains("\"currencyCode\":\"USD\""));
+        assertTrue(body.contains("\"amount\":100.5"));
+        assertTrue(body.contains("\"returnUrl\":\"https://example.com/success\""));
+        assertTrue(body.contains("\"cancelUrl\":\"https://example.com/cancel\""));
     }
 
     // -------------------------------------------------------------------------
